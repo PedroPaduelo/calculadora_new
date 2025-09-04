@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -15,7 +15,7 @@ model User {
   email     String   @unique
   name      String
   password  String
-  role      Role     @default(ANALYST)
+  role      String   @default("ANALYST")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -30,8 +30,8 @@ model Operation {
   name        String
   description String?
   
-  // Working hours as JSON
-  workingHours Json
+  // Working hours as JSON string
+  workingHours String
   
   slaTarget     Float
   slaPercentage Float
@@ -50,7 +50,7 @@ model Operation {
 
 model WorkShift {
   id                String        @id @default(cuid())
-  duration          ShiftDuration
+  duration          String
   unproductivityRate Float
   minLoginTime      String
   maxLoginTime      String
@@ -66,10 +66,10 @@ model PlanningPremise {
   operationId  String
   plannedMonth String // YYYY-MM format
   
-  // Curves stored as JSON arrays
-  volumeCurve Json
-  tmiCurve    Json
-  tmaCurve    Json
+  // Curves stored as JSON strings
+  volumeCurve String
+  tmiCurve    String
+  tmaCurve    String
   
   unproductivityPercentage Float
   
@@ -107,7 +107,7 @@ model Schedule {
   employeeId String
   date       DateTime
   shift      String
-  status     ScheduleStatus
+  status     String
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -125,9 +125,9 @@ model Scenario {
   userId      String
   operationId String
   
-  // Snapshots stored as JSON
-  premisesSnapshot Json
-  resultsSnapshot  Json
+  // Snapshots stored as JSON strings
+  premisesSnapshot String
+  resultsSnapshot  String
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -139,21 +139,7 @@ model Scenario {
   @@map("scenarios")
 }
 
-// Enums
-enum Role {
-  ADMIN
-  MANAGER
-  ANALYST
-}
-
-enum ShiftDuration {
-  SHIFT_6_20  // 6:20
-  SHIFT_8_12  // 8:12
-  SHIFT_4_00  // 4:00
-}
-
-enum ScheduleStatus {
-  WORKING
-  DAY_OFF
-  TRAINING
-}
+// SQLite doesn't support enums, using string constants instead
+// Role: "ADMIN", "MANAGER", "ANALYST"
+// ShiftDuration: "SHIFT_6_20", "SHIFT_8_12", "SHIFT_4_00"
+// ScheduleStatus: "WORKING", "DAY_OFF", "TRAINING"
