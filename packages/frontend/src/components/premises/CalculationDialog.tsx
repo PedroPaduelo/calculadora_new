@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Calculator, TrendingUp, Users, Clock } from 'lucide-react'
 import { PlanningPremise } from '@calculadora-hc/shared'
 import { useCalculateDimensioning } from '@/hooks/use-premises'
+import { useCreateScenario } from '@/hooks/use-scenarios'
 
 interface CalculationDialogProps {
   open: boolean
@@ -17,8 +18,10 @@ interface CalculationDialogProps {
 export function CalculationDialog({ open, onOpenChange, premise }: CalculationDialogProps) {
   const [targetSLA, setTargetSLA] = useState(80)
   const [calculationResult, setCalculationResult] = useState<any>(null)
+  const [scenarioName, setScenarioName] = useState('')
   
   const calculateMutation = useCalculateDimensioning()
+  const createScenarioMutation = useCreateScenario()
 
   const handleCalculate = async () => {
     if (!premise) return
@@ -35,8 +38,40 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
     }
   }
 
+  const handleSaveScenario = async () => {
+    if (!premise || !calculationResult || !scenarioName.trim()) return
+
+    try {
+      await createScenarioMutation.mutateAsync({
+        name: scenarioName,
+        description: `Cenário calculado para ${premise.plannedMonth} - SLA ${targetSLA}%`,
+        operationId: premise.operationId,
+        premisesSnapshot: {
+          premise: {
+            id: premise.id,
+            plannedMonth: premise.plannedMonth,
+            volumeCurve: premise.volumeCurve,
+            tmiCurve: premise.tmiCurve,
+            tmaCurve: premise.tmaCurve,
+            unproductivityPercentage: premise.unproductivityPercentage,
+          },
+          calculationParams: {
+            targetSLA,
+          },
+        },
+        resultsSnapshot: calculationResult,
+      })
+      
+      setScenarioName('')
+      handleClose()
+    } catch (error) {
+      // Error handling is done in the mutation
+    }
+  }
+
   const handleClose = () => {
     setCalculationResult(null)
+    setScenarioName('')
     onOpenChange(false)
   }
 
@@ -113,7 +148,7 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
                       <span className="text-sm font-medium">HC Necessário</span>
                     </div>
                     <p className="text-2xl font-bold text-primary">
-                      {calculationResult.requiredHC || 0}
+                      {calculationResult.metrics?.totalHC || 0}
                     </p>
                   </div>
 
@@ -123,7 +158,7 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
                       <span className="text-sm font-medium">SLA Projetado</span>
                     </div>
                     <p className="text-2xl font-bold text-green-600">
-                      {calculationResult.projectedSLA || 0}%
+                      {calculationResult.calculationParams?.targetSLA || 0}%
                     </p>
                   </div>
 
@@ -133,7 +168,7 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
                       <span className="text-sm font-medium">Ocupação</span>
                     </div>
                     <p className="text-2xl font-bold text-blue-600">
-                      {calculationResult.occupancy || 0}%
+                      {Math.round(calculationResult.metrics?.avgOccupancy || 0)}%
                     </p>
                   </div>
                 </div>
@@ -153,13 +188,13 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
                         </tr>
                       </thead>
                       <tbody>
-                        {calculationResult.periods?.map((period: any, index: number) => (
+                        {calculationResult.hcDistribution?.map((hc: number, index: number) => (
                           <tr key={index} className="border-b">
-                            <td className="p-2">{period.time || `${index}:00`}</td>
-                            <td className="p-2">{period.volume || 0}</td>
-                            <td className="p-2">{period.tmi || 0}</td>
-                            <td className="p-2">{period.requiredHC || 0}</td>
-                            <td className="p-2">{period.sla || 0}%</td>
+                            <td className="p-2">{`${Math.floor(index / 4).toString().padStart(2, '0')}:${((index % 4) * 15).toString().padStart(2, '0')}`}</td>
+                            <td className="p-2">{premise?.volumeCurve?.[index] || 0}</td>
+                            <td className="p-2">{premise?.tmiCurve?.[index] || 0}</td>
+                            <td className="p-2">{hc}</td>
+                            <td className="p-2">{Math.round(calculationResult.occupancyData?.[index] || 0)}%</td>
                           </tr>
                         )) || (
                           <tr>
@@ -173,6 +208,22 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
                   </div>
                 </div>
               </div>
+
+              {/* Save Scenario Section */}
+              <div className="bg-muted/20 p-4 rounded-lg">
+                <h4 className="font-medium mb-3">Salvar Cenário</h4>
+                <div className="space-y-3">
+                  <div>
+                    <Label htmlFor="scenarioName">Nome do Cenário</Label>
+                    <Input
+                      id="scenarioName"
+                      placeholder="Ex: Dimensionamento Outubro 2025"
+                      value={scenarioName}
+                      onChange={(e) => setScenarioName(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -182,8 +233,11 @@ export function CalculationDialog({ open, onOpenChange, premise }: CalculationDi
             Fechar
           </Button>
           {calculationResult && (
-            <Button>
-              Salvar Cenário
+            <Button 
+              onClick={handleSaveScenario}
+              disabled={!scenarioName.trim() || createScenarioMutation.isPending}
+            >
+              {createScenarioMutation.isPending ? 'Salvando...' : 'Salvar Cenário'}
             </Button>
           )}
         </div>

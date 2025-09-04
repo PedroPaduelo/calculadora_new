@@ -109,8 +109,8 @@ const scenarioRoutes: FastifyPluginAsync = async (fastify) => {
           description: body.description,
           userId,
           operationId: body.operationId,
-          premisesSnapshot: body.premisesSnapshot,
-          resultsSnapshot: body.resultsSnapshot,
+          premisesSnapshot: JSON.stringify(body.premisesSnapshot),
+          resultsSnapshot: JSON.stringify(body.resultsSnapshot),
         },
         include: {
           operation: {
@@ -311,6 +311,69 @@ const scenarioRoutes: FastifyPluginAsync = async (fastify) => {
         message: 'Scenario deleted successfully',
       });
     } catch (error) {
+      throw error;
+    }
+  });
+
+  // Copy scenario
+  fastify.post('/copy', { preHandler: authenticate }, async (request, reply) => {
+    try {
+      const copyScenarioSchema = z.object({
+        sourceId: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+      });
+
+      const body = copyScenarioSchema.parse(request.body);
+      const { userId } = request.user as { userId: string };
+
+      // Get the source scenario
+      const sourceScenario = await fastify.prisma.scenario.findFirst({
+        where: { 
+          id: body.sourceId,
+          userId 
+        },
+      });
+
+      if (!sourceScenario) {
+        return reply.status(404).send({
+          success: false,
+          error: 'Source scenario not found',
+        });
+      }
+
+      // Create the copy
+      const copiedScenario = await fastify.prisma.scenario.create({
+        data: {
+          name: body.name,
+          description: body.description,
+          userId,
+          operationId: sourceScenario.operationId,
+          premisesSnapshot: sourceScenario.premisesSnapshot,
+          resultsSnapshot: sourceScenario.resultsSnapshot,
+        },
+        include: {
+          operation: {
+            select: { name: true },
+          },
+          user: {
+            select: { name: true },
+          },
+        },
+      });
+
+      return reply.status(201).send({
+        success: true,
+        data: copiedScenario,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Validation error',
+          details: error.errors,
+        });
+      }
       throw error;
     }
   });
