@@ -47,7 +47,7 @@ const calculationRoutes: FastifyPluginAsync = async (fastify) => {
   };
 
   // Calculate HC dimensioning
-  fastify.post('/dimension', { preHandler: authenticate }, async (request, reply) => {
+  fastify.post('/dimensioning', { preHandler: authenticate }, async (request, reply) => {
     try {
       const body = DimensionCalculationSchema.parse(request.body);
 
@@ -71,8 +71,8 @@ const calculationRoutes: FastifyPluginAsync = async (fastify) => {
         });
       }
 
-      const volumeCurve = premise.volumeCurve as number[];
-      const tmiCurve = premise.tmiCurve as number[];
+      const volumeCurve = JSON.parse(premise.volumeCurve) as number[];
+      const tmiCurve = JSON.parse(premise.tmiCurve) as number[];
       const targetSLA = body.targetSLA || premise.operation.slaTarget;
       const unproductivity = body.customUnproductivity || premise.unproductivityPercentage;
 

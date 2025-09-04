@@ -30,6 +30,31 @@ const premiseRoutes: FastifyPluginAsync = async (fastify) => {
     }
   };
 
+  // Get all premises
+  fastify.get('/', { preHandler: authenticate }, async (request, reply) => {
+    const premises = await fastify.prisma.planningPremise.findMany({
+      orderBy: { plannedMonth: 'desc' },
+      include: {
+        operation: {
+          select: { name: true },
+        },
+      },
+    });
+
+    // Deserialize JSON curves
+    const premisesWithParsedCurves = premises.map(premise => ({
+      ...premise,
+      volumeCurve: JSON.parse(premise.volumeCurve),
+      tmiCurve: JSON.parse(premise.tmiCurve),
+      tmaCurve: JSON.parse(premise.tmaCurve),
+    }));
+
+    return reply.send({
+      success: true,
+      data: premisesWithParsedCurves,
+    });
+  });
+
   // Get premises for operation
   fastify.get('/operation/:operationId', { preHandler: authenticate }, async (request, reply) => {
     const { operationId } = request.params as { operationId: string };
@@ -44,9 +69,17 @@ const premiseRoutes: FastifyPluginAsync = async (fastify) => {
       },
     });
 
+    // Deserialize JSON curves
+    const premisesWithParsedCurves = premises.map(premise => ({
+      ...premise,
+      volumeCurve: JSON.parse(premise.volumeCurve),
+      tmiCurve: JSON.parse(premise.tmiCurve),
+      tmaCurve: JSON.parse(premise.tmaCurve),
+    }));
+
     return reply.send({
       success: true,
-      data: premises,
+      data: premisesWithParsedCurves,
     });
   });
 
@@ -68,9 +101,17 @@ const premiseRoutes: FastifyPluginAsync = async (fastify) => {
       });
     }
 
+    // Deserialize JSON curves
+    const premiseWithParsedCurves = {
+      ...premise,
+      volumeCurve: JSON.parse(premise.volumeCurve),
+      tmiCurve: JSON.parse(premise.tmiCurve),
+      tmaCurve: JSON.parse(premise.tmaCurve),
+    };
+
     return reply.send({
       success: true,
-      data: premise,
+      data: premiseWithParsedCurves,
     });
   });
 
@@ -104,9 +145,9 @@ const premiseRoutes: FastifyPluginAsync = async (fastify) => {
         data: {
           operationId: body.operationId,
           plannedMonth: body.plannedMonth,
-          volumeCurve: body.volumeCurve,
-          tmiCurve: body.tmiCurve,
-          tmaCurve: body.tmaCurve,
+          volumeCurve: JSON.stringify(body.volumeCurve),
+          tmiCurve: JSON.stringify(body.tmiCurve),
+          tmaCurve: JSON.stringify(body.tmaCurve),
           unproductivityPercentage: body.unproductivityPercentage,
         },
       });
@@ -145,9 +186,15 @@ const premiseRoutes: FastifyPluginAsync = async (fastify) => {
         }
       }
 
+      // Serialize curves if provided
+      const updateData: any = { ...body };
+      if (body.volumeCurve) updateData.volumeCurve = JSON.stringify(body.volumeCurve);
+      if (body.tmiCurve) updateData.tmiCurve = JSON.stringify(body.tmiCurve);
+      if (body.tmaCurve) updateData.tmaCurve = JSON.stringify(body.tmaCurve);
+
       const premise = await fastify.prisma.planningPremise.update({
         where: { id },
-        data: body,
+        data: updateData,
       });
 
       return reply.send({

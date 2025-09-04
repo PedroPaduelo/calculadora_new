@@ -76,7 +76,7 @@ const operationRoutes: FastifyPluginAsync = async (fastify) => {
         data: {
           name: body.name,
           description: body.description,
-          workingHours: body.workingHours,
+          workingHours: JSON.stringify(body.workingHours),
           slaTarget: body.slaTarget,
           slaPercentage: body.slaPercentage,
         },
@@ -105,9 +105,15 @@ const operationRoutes: FastifyPluginAsync = async (fastify) => {
       const { id } = request.params as { id: string };
       const body = UpdateOperationSchema.parse(request.body);
 
+      // Convert workingHours to JSON string if present
+      const updateData: any = { ...body };
+      if (updateData.workingHours) {
+        updateData.workingHours = JSON.stringify(updateData.workingHours);
+      }
+
       const operation = await fastify.prisma.operation.update({
         where: { id },
-        data: body,
+        data: updateData,
       });
 
       return reply.send({
@@ -123,7 +129,7 @@ const operationRoutes: FastifyPluginAsync = async (fastify) => {
           details: error.errors,
         });
       }
-      if (error.code === 'P2025') {
+      if ((error as any).code === 'P2025') {
         return reply.status(404).send({
           success: false,
           error: 'Operation not found',
@@ -147,7 +153,7 @@ const operationRoutes: FastifyPluginAsync = async (fastify) => {
         message: 'Operation deleted successfully',
       });
     } catch (error) {
-      if (error.code === 'P2025') {
+      if ((error as any).code === 'P2025') {
         return reply.status(404).send({
           success: false,
           error: 'Operation not found',
