@@ -8,6 +8,7 @@ import { OperationsPage } from '@/pages/operations/OperationsPage'
 import { PremisesPage } from '@/pages/premises/PremisesPage'
 import { CalculationsPage } from '@/pages/calculations/CalculationsPage'
 import { ScenariosPage } from '@/pages/scenarios/ScenariosPage'
+import { SchedulePage } from '@/pages/schedule/SchedulePage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 function App() {
