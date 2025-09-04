@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora HC - Contact Center | Apresentação</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-calculator"></i>
+                <span>Calculadora HC</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#overview" class="nav-link">Visão Geral</a></li>
+                <li><a href="#features" class="nav-link">Funcionalidades</a></li>
+                <li><a href="#architecture" class="nav-link">Arquitetura</a></li>
+                <li><a href="#demo" class="nav-link">Demo</a></li>
+                <li><a href="#setup" class="nav-link">Setup</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Calculadora HC</span>
+                    <br>Contact Center
+                </h1>
+                <p class="hero-subtitle">
+                    Sistema avançado para planejamento e dimensionamento de recursos humanos em operações de contact center
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToSection('demo')">
+                        <i class="fas fa-play"></i>
+                        Ver Demo
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToSection('setup')">
+                        <i class="fas fa-download"></i>
+                        Começar Agora
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-header">
+                        <div class="dashboard-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="dashboard-title">Dashboard HC</div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="metric-card">
+                            <div class="metric-value">247</div>
+                            <div class="metric-label">HC Total</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">85.2%</div>
+                            <div class="metric-label">SLA</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">72%</div>
+                            <div class="metric-label">Ocupação</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Visão Geral do Projeto</h2>
+                <p class="section-subtitle">
+                    Solução completa para otimização de escalas, garantia de SLA e eficiência financeira
+                </p>
+            </div>
+            
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Algoritmos Avançados</h3>
+                    <p>Utiliza Erlang C para dimensionamento preciso e algoritmos de otimização para máxima eficiência</p>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Gestão de Recursos</h3>
+                    <p>Controle completo de escalas, turnos e alocação de recursos humanos</p>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-target"></i>
+                    </div>
+                    <h3>Garantia de SLA</h3>
+                    <p>Monitoramento e otimização contínua para atingir metas de nível de serviço</p>
+                </div>
+                
+                <div class="overview-card">
+                    <div class="card-icon">
+                        <i class="fas fa-save"></i>
+                    </div>
+                    <h3>Cenários Salvos</h3>
+                    <p>Salve e compare diferentes cenários de planejamento para tomada de decisão</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">8 Abas Obrigatórias</h2>
+                <p class="section-subtitle">Funcionalidades completas para gestão de contact center</p>
+            </div>
+            
+            <div class="features-container">
+                <div class="features-tabs">
+                    <button class="tab-btn active" data-tab="geral">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Geral
+                    </button>
+                    <button class="tab-btn" data-tab="dimensionamento">
+                        <i class="fas fa-calculator"></i>
+                        Dimensionamento
+                    </button>
+                    <button class="tab-btn" data-tab="escala">
+                        <i class="fas fa-calendar-alt"></i>
+                        Escala x Necessidade
+                    </button>
+                    <button class="tab-btn" data-tab="occupancy">
+                        <i class="fas fa-chart-pie"></i>
+                        Occupancy
+                    </button>
+                    <button class="tab-btn" data-tab="horaextra">
+                        <i class="fas fa-clock"></i>
+                        Hora Extra
+                    </button>
+                    <button class="tab-btn" data-tab="treinamento">
+                        <i class="fas fa-graduation-cap"></i>
+                        Treinamento
+                    </button>
+                    <button class="tab-btn" data-tab="escalas">
+                        <i class="fas fa-calendar-week"></i>
+                        Escala
+                    </button>
+                    <button class="tab-btn" data-tab="analytics">
+                        <i class="fas fa-analytics"></i>
+                        P.A's
+                    </button>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="geral">
+                        <h3>Dashboard Executivo</h3>
+                        <p>Visão geral consolidada com métricas principais, KPIs e indicadores de performance em tempo real.</p>
+                        <ul>
+                            <li>Métricas de HC total e por operação</li>
+                            <li>Indicadores de SLA e ocupação</li>
+                            <li>Gráficos de tendências e comparativos</li>
+                            <li>Alertas e notificações importantes</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="dimensionamento">
+                        <h3>Cálculo de Necessidade de HC</h3>
+                        <p>Algoritmo Erlang C para dimensionamento preciso baseado em volume, TMI e metas de SLA.</p>
+                        <ul>
+                            <li>Cálculo automático por intervalo de tempo</li>
+                            <li>Consideração de improdutividade</li>
+                            <li>Simulação de diferentes cenários</li>
+                            <li>Otimização de recursos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="escala">
+                        <h3>Comparação Escala vs Necessidade</h3>
+                        <p>Análise comparativa entre a escala atual e a necessidade calculada para identificar gaps.</p>
+                        <ul>
+                            <li>Visualização de déficit/superávit por período</li>
+                            <li>Recomendações de ajustes</li>
+                            <li>Impacto no SLA</li>
+                            <li>Análise de custos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="occupancy">
+                        <h3>Taxa de Ocupação</h3>
+                        <p>Monitoramento da taxa de ocupação dos recursos para otimização da produtividade.</p>
+                        <ul>
+                            <li>Ocupação por agente e equipe</li>
+                            <li>Tendências históricas</li>
+                            <li>Benchmarks e metas</li>
+                            <li>Identificação de oportunidades</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="horaextra">
+                        <h3>Gestão de Horas Extras</h3>
+                        <p>Controle e análise de horas extras com impacto financeiro e operacional.</p>
+                        <ul>
+                            <li>Planejamento de horas extras</li>
+                            <li>Análise de custos</li>
+                            <li>Alternativas de cobertura</li>
+                            <li>Relatórios gerenciais</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="treinamento">
+                        <h3>Módulo de Treinamentos</h3>
+                        <p>Gestão de treinamentos com impacto na disponibilidade de recursos.</p>
+                        <ul>
+                            <li>Planejamento de treinamentos</li>
+                            <li>Impacto na operação</li>
+                            <li>Cronograma otimizado</li>
+                            <li>Acompanhamento de progresso</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="escalas">
+                        <h3>Gestão Completa de Escalas</h3>
+                        <p>Criação, edição e otimização de escalas respeitando regras DSR e preferências.</p>
+                        <ul>
+                            <li>Escalas automáticas e manuais</li>
+                            <li>Regras DSR (75% domingo, 125% folgas)</li>
+                            <li>Turnos customizáveis</li>
+                            <li>Rotação de folgas</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-pane" id="analytics">
+                        <h3>Performance Analytics</h3>
+                        <p>Análises avançadas de performance com múltiplas dimensões e indicadores.</p>
+                        <ul>
+                            <li>HCs, volume e AHT/TMI</li>
+                            <li>Nível de serviço (NS)</li>
+                            <li>Taxa de improdutividade</li>
+                            <li>Chamadas no SLA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Arquitetura Técnica</h2>
+                <p class="section-subtitle">Stack moderno e escalável para alta performance</p>
+            </div>
+            
+            <div class="architecture-grid">
+                <div class="arch-layer">
+                    <h3><i class="fas fa-desktop"></i> Frontend</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">React</span>
+                        <span class="tech-item">TypeScript</span>
+                        <span class="tech-item">Vite</span>
+                        <span class="tech-item">TanStack Query</span>
+                        <span class="tech-item">Shadcn/UI</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3><i class="fas fa-server"></i> Backend</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">Node.js</span>
+                        <span class="tech-item">Fastify</span>
+                        <span class="tech-item">Prisma ORM</span>
+                        <span class="tech-item">JWT Auth</span>
+                        <span class="tech-item">Zod Validation</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3><i class="fas fa-database"></i> Banco de Dados</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">PostgreSQL</span>
+                        <span class="tech-item">Redis Cache</span>
+                        <span class="tech-item">Prisma Migrations</span>
+                        <span class="tech-item">Índices Otimizados</span>
+                    </div>
+                </div>
+                
+                <div class="arch-layer">
+                    <h3><i class="fas fa-cogs"></i> DevOps</h3>
+                    <div class="tech-stack">
+                        <span class="tech-item">Docker</span>
+                        <span class="tech-item">Turborepo</span>
+                        <span class="tech-item">ESLint</span>
+                        <span class="tech-item">TypeScript</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithms-section">
+                <h3>Algoritmos Implementados</h3>
+                <div class="algorithm-grid">
+                    <div class="algorithm-card">
+                        <h4>Erlang C</h4>
+                        <p>Cálculo preciso de necessidade de agentes baseado em volume, TMI e SLA</p>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Otimização DSR</h4>
+                        <p>Regras de domingo (75% trabalham) e folgas semanais (125% total)</p>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Simplex</h4>
+                        <p>Otimização linear para máxima eficiência com restrições operacionais</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="section bg-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title text-white">Demonstração</h2>
+                <p class="section-subtitle text-light">Veja o sistema em funcionamento</p>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-info">
+                    <h3>Acesso ao Sistema</h3>
+                    <div class="demo-credentials">
+                        <div class="credential-item">
+                            <strong>Administrador:</strong>
+                            <code>admin@calculadora.com</code> / <code>123456</code>
+                        </div>
+                        <div class="credential-item">
+                            <strong>Gerente:</strong>
+                            <code>manager@calculadora.com</code> / <code>123456</code>
+                        </div>
+                        <div class="credential-item">
+                            <strong>Analista:</strong>
+                            <code>analyst@calculadora.com</code> / <code>123456</code>
+                        </div>
+                    </div>
+                    
+                    <div class="demo-links">
+                        <a href="http://localhost:3000" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Acessar Frontend
+                        </a>
+                        <a href="http://localhost:3001" target="_blank" class="btn btn-secondary">
+                            <i class="fas fa-code"></i>
+                            API Backend
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="demo-features">
+                    <h3>Funcionalidades Disponíveis</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Sistema de autenticação JWT</li>
+                        <li><i class="fas fa-check"></i> CRUD de operações e premissas</li>
+                        <li><i class="fas fa-check"></i> Cálculos de dimensionamento</li>
+                        <li><i class="fas fa-check"></i> Gestão de cenários</li>
+                        <li><i class="fas fa-check"></i> Dashboard executivo</li>
+                        <li><i class="fas fa-check"></i> Relatórios e analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Setup Section -->
+    <section id="setup" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Como Executar</h2>
+                <p class="section-subtitle">Guia passo a passo para rodar o projeto localmente</p>
+            </div>
+            
+            <div class="setup-grid">
+                <div class="setup-method">
+                    <h3><i class="fas fa-rocket"></i> Setup Automático (Recomendado)</h3>
+                    <div class="code-block">
+                        <pre><code># 1. Setup inicial das dependências
+.\setup-simple.bat
+
+# 2. Configurar banco e dados iniciais  
+.\setup-database.bat
+
+# 3. Iniciar backend
+.\start-backend.bat
+
+# 4. Iniciar frontend (novo terminal)
+cd packages\frontend
+npm run dev</code></pre>
+                    </div>
+                </div>
+                
+                <div class="setup-method">
+                    <h3><i class="fas fa-terminal"></i> Setup Manual</h3>
+                    <div class="code-block">
+                        <pre><code># Backend
+cd packages\backend
+npm install
+npm run dev
+
+# Frontend (novo terminal)
+cd packages\frontend  
+npm install
+npm run dev</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-info">
+                <div class="info-card">
+                    <h4><i class="fas fa-link"></i> URLs de Acesso</h4>
+                    <ul>
+                        <li><strong>Frontend:</strong> http://localhost:3000</li>
+                        <li><strong>Backend API:</strong> http://localhost:3001</li>
+                        <li><strong>Health Check:</strong> http://localhost:3001/health</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-database"></i> Banco de Dados</h4>
+                    <ul>
+                        <li><strong>Tipo:</strong> SQLite (dev.db)</li>
+                        <li><strong>ORM:</strong> Prisma</li>
+                        <li><strong>Seed:</strong> Dados de teste incluídos</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4><i class="fas fa-tools"></i> Requisitos</h4>
+                    <ul>
+                        <li><strong>Node.js:</strong> 18+ (atual: 22.16.0)</li>
+                        <li><strong>NPM:</strong> 10+</li>
+                        <li><strong>OS:</strong> Windows/Linux/macOS</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Calculadora HC</h4>
+                    <p>Sistema avançado para planejamento e dimensionamento de recursos humanos em contact centers.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="#overview">Visão Geral</a></li>
+                        <li><a href="#features">Funcionalidades</a></li>
+                        <li><a href="#architecture">Arquitetura</a></li>
+                        <li><a href="#setup">Setup</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Tecnologias</h4>
+                    <ul>
+                        <li>React + TypeScript</li>
+                        <li>Node.js + Fastify</li>
+                        <li>PostgreSQL + Prisma</li>
+                        <li>Docker + Redis</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> suporte@calculadora.com</li>
+                        <li><i class="fab fa-github"></i> GitHub Repository</li>
+                        <li><i class="fas fa-book"></i> Documentação</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Calculadora HC. Desenvolvido com ❤️ para otimizar operações de contact center.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
