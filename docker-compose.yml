@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: calculadora-postgres
+    environment:
+      POSTGRES_DB: calculadora_hc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./packages/backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - calculadora-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: calculadora-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - calculadora-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+    container_name: calculadora-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres123@postgres:5432/calculadora_hc
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your-super-secret-jwt-key-development
+      JWT_REFRESH_SECRET: your-super-secret-refresh-key-development
+      PORT: 3001
+      NODE_ENV: development
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./packages/backend:/app/packages/backend
+      - ./packages/shared:/app/packages/shared
+      - /app/packages/backend/node_modules
+      - /app/packages/shared/node_modules
+    networks:
+      - calculadora-network
+    command: npm run dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+    container_name: calculadora-frontend
+    environment:
+      VITE_API_URL: http://localhost:3001/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./packages/frontend:/app/packages/frontend
+      - ./packages/shared:/app/packages/shared
+      - /app/packages/frontend/node_modules
+      - /app/packages/shared/node_modules
+    networks:
+      - calculadora-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  calculadora-network:
+    driver: bridge

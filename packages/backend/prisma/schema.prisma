@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(ANALYST)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  scenarios Scenario[]
+
+  @@map("users")
+}
+
+model Operation {
+  id          String @id @default(cuid())
+  name        String
+  description String?
+  
+  // Working hours as JSON
+  workingHours Json
+  
+  slaTarget     Float
+  slaPercentage Float
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  premises          PlanningPremise[]
+  resourceAllocations ResourceAllocation[]
+  schedules         Schedule[]
+  scenarios         Scenario[]
+
+  @@map("operations")
+}
+
+model WorkShift {
+  id                String        @id @default(cuid())
+  duration          ShiftDuration
+  unproductivityRate Float
+  minLoginTime      String
+  maxLoginTime      String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("work_shifts")
+}
+
+model PlanningPremise {
+  id           String @id @default(cuid())
+  operationId  String
+  plannedMonth String // YYYY-MM format
+  
+  // Curves stored as JSON arrays
+  volumeCurve Json
+  tmiCurve    Json
+  tmaCurve    Json
+  
+  unproductivityPercentage Float
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  operation Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@map("planning_premises")
+}
+
+model ResourceAllocation {
+  id           String   @id @default(cuid())
+  operationId  String
+  date         DateTime
+  timeInterval String
+  requiredHCs  Int
+  allocatedHCs Int
+  occupancy    Float
+  slaAchieved  Float
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  operation Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@map("resource_allocations")
+}
+
+model Schedule {
+  id         String        @id @default(cuid())
+  operationId String
+  employeeId String
+  date       DateTime
+  shift      String
+  status     ScheduleStatus
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  operation Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@map("schedules")
+}
+
+model Scenario {
+  id          String @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  operationId String
+  
+  // Snapshots stored as JSON
+  premisesSnapshot Json
+  resultsSnapshot  Json
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  operation Operation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@map("scenarios")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  MANAGER
+  ANALYST
+}
+
+enum ShiftDuration {
+  SHIFT_6_20  // 6:20
+  SHIFT_8_12  // 8:12
+  SHIFT_4_00  // 4:00
+}
+
+enum ScheduleStatus {
+  WORKING
+  DAY_OFF
+  TRAINING
+}
