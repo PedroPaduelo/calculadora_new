@@ -9,6 +9,7 @@ import { PremisesPage } from '@/pages/premises/PremisesPage'
 import { CalculationsPage } from '@/pages/calculations/CalculationsPage'
 import { ScenariosPage } from '@/pages/scenarios/ScenariosPage'
 import { SchedulePage } from '@/pages/schedule/SchedulePage'
+import { OccupancyPage } from '@/pages/occupancy/OccupancyPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 function App() {
@@ -32,6 +33,8 @@ function App() {
             <Route path="premises" element={<PremisesPage />} />
             <Route path="calculations" element={<CalculationsPage />} />
             <Route path="scenarios" element={<ScenariosPage />} />
+            <Route path="schedule" element={<SchedulePage />} />
+            <Route path="occupancy" element={<OccupancyPage />} />
           </Route>
         </Route>
         

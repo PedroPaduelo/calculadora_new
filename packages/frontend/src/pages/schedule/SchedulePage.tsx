@@ -3,23 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Separator } from '@/components/ui/separator'
+import { AdjustScheduleDialog } from '@/components/schedule/AdjustScheduleDialog'
+import { ExportScheduleDialog } from '@/components/schedule/ExportScheduleDialog'
 import { 
   Users, 
   Clock, 
   AlertTriangle, 
   CheckCircle, 
   TrendingUp,
-  TrendingDown,
   Calendar,
-  Target
+  Target,
+  Download,
+  Settings
 } from 'lucide-react'
 
 export function SchedulePage() {
   const [selectedPeriod, setSelectedPeriod] = useState('today')
+  const [adjustDialogOpen, setAdjustDialogOpen] = useState(false)
+  const [exportDialogOpen, setExportDialogOpen] = useState(false)
 
   // Mock data - replace with real API calls
-  const scheduleData = {
+  const getScheduleData = (_period: string) => ({
     summary: {
       totalScheduled: 180,
       totalNeeded: 165,
@@ -41,6 +45,13 @@ export function SchedulePage() {
       { name: 'Tarde', scheduled: 40, needed: 35, coverage: 114 },
       { name: 'Noite', scheduled: 30, needed: 20, coverage: 150 }
     ]
+  })
+
+  const scheduleData = getScheduleData(selectedPeriod)
+
+  const handleAdjustSchedule = (adjustments: any[]) => {
+    console.log('Adjustments saved:', adjustments)
+    // Here you would typically call an API to save the adjustments
   }
 
   const getStatusColor = (status: string) => {
@@ -283,13 +294,30 @@ export function SchedulePage() {
 
       {/* Action Buttons */}
       <div className="flex justify-end gap-2">
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => setExportDialogOpen(true)}>
+          <Download className="mr-2 h-4 w-4" />
           Exportar Relatório
         </Button>
-        <Button>
+        <Button onClick={() => setAdjustDialogOpen(true)}>
+          <Settings className="mr-2 h-4 w-4" />
           Ajustar Escalas
         </Button>
       </div>
+
+      {/* Dialogs */}
+      <AdjustScheduleDialog
+        open={adjustDialogOpen}
+        onOpenChange={setAdjustDialogOpen}
+        periods={scheduleData.periods}
+        onSave={handleAdjustSchedule}
+      />
+
+      <ExportScheduleDialog
+        open={exportDialogOpen}
+        onOpenChange={setExportDialogOpen}
+        currentPeriod={selectedPeriod}
+        scheduleData={scheduleData}
+      />
     </div>
   )
 }
